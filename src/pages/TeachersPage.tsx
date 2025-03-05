@@ -7,44 +7,114 @@ const teachers = [
   {
     id: 1,
     name: "Abid Ali",
-    image: "/Teachers/Abid Ali.jpeg",
+    image: "/Teachers/Abid Ali.JPG",
     experience: "15+ years",
-    sections: ["primary"]
-  },
-  {
-    id: 2,
-    name: "JP Shukla",
-    image: "/Teachers/JP Shukla.jpeg",
-    experience: "12+ years",
-    sections: ["primary"]
-  },
-  {
-    id: 3,
-    name: "Mamta Tiwari",
-    image: "/Teachers/Mamta Tiwari.jpg",
-    experience: "10+ years",
     sections: ["middle", "secondary"]
   },
   {
-    id: 4,
-    name: "KM Pandey",
-    image: "/Teachers/KN Pandey.jpeg",
+    id: 2,
+    name: "Anamika Mishra",
+    image: "/Teachers/Anamika Mishra.JPG",
+    experience: "10+ years",
+    sections: ["primary", "middle"]
+  },
+  {
+    id: 3,
+    name: "Aviriti Srivastav",
+    image: "/Teachers/Aviriti.JPG",
     experience: "8+ years",
-    sections: ["middle"]
+    sections: ["primary"]
+  },
+  {
+    id: 4,
+    name: "Jagriti Solanki",
+    image: "/Teachers/Jagriti Solanki.JPG",
+    experience: "12+ years",
+    sections: ["accountant"]
   },
   {
     id: 5,
+    name: "Jaya Singh",
+    image: "/Teachers/Jaya Singh.JPG",
+    experience: "10+ years",
+    sections: ["accountant"]
+  },
+  {
+    id: 6,
+    name: "JP Shukla",
+    image: "/Teachers/JP Shukla.JPG",
+    experience: "12+ years",
+    sections: ["middle", "secondary"]
+  },
+  {
+    id: 7,
+    name: "Karuna Singh",
+    image: "/Teachers/Karuna Singh.JPG",
+    experience: "9+ years",
+    sections: ["primary"]
+  },
+  {
+    id: 8,
+    name: "KM Pandey",
+    image: "/Teachers/KM Pandey.jpeg",
+    experience: "8+ years",
+    sections: ["secondary"]
+  },
+  {
+    id: 9,
     name: "Madhav Tripathi",
     image: "/Teachers/Madhav Tripathi.jpeg",
     experience: "10+ years",
     sections: ["middle", "secondary"]
   },
   {
-    id: 6,
+    id: 10,
+    name: "Mamta Tiwari",
+    image: "/Teachers/Mamta Tiwari.JPG",
+    experience: "10+ years",
+    sections: ["secondary"]
+  },
+  {
+    id: 11,
+    name: "Muskan Gupta",
+    image: "/Teachers/Muskan Gupta.JPG",
+    experience: "7+ years",
+    sections: ["primary"]
+  },
+  {
+    id: 12,
+    name: "Naveen Chaurasia",
+    image: "/Teachers/Naveen Chaurasia.jpeg",
+    experience: "14+ years",
+    sections: ["secondary"]
+  },
+  {
+    id: 13,
     name: "Ashok Nigam",
     image: "/Teachers/Nigam.jpg",
     experience: "15+ years",
-    sections: ["office"]
+    sections: ["accountant"]
+  },
+  {
+    id: 14,
+    name: "Ruby Srivastav",
+    image: "/Teachers/Ruby Srivastav.JPG",
+    experience: "9+ years",
+    sections: ["primary"]
+  },
+  {
+    id: 15,
+    name: "Vishal Rai",
+    image: "/Teachers/Vishal Rai.JPG",
+    experience: "11+ years",
+    sections: ["secondary"]
+  },
+  {
+    id: 16,
+    name: "Satya Prakash Yadav",
+    image: "/Teachers/Satya Prakash Yadav.png",
+    experience: "10+ years",
+    sections: ["sports"]
   }
 ];
 
@@ -53,7 +123,8 @@ const sections = [
   { id: "primary", label: "Primary (I-V)" },
   { id: "middle", label: "Middle (VI-VIII)" },
   { id: "secondary", label: "Secondary (IX-XII)" },
-  { id: "office", label: "Office Management" }
+  { id: "accountant", label: "Accountant" },
+  { id: "sports", label: "Sports" }
 ];
 
 const TeachersPage = () => {
@@ -103,7 +174,7 @@ const TeachersPage = () => {
                 <img
                   src={teacher.image}
                   alt={teacher.name}
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full teacher-profile-image"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>

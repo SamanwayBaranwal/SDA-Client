@@ -17,22 +17,62 @@ export const EnquiryForm = () => {
     fullAddress: "",
     message: ""
   });
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Enquiry Submitted Successfully!",
-      description: "We'll get back to you soon.",
-      duration: 3000,
-    });
-    setFormData({
-      enquiryType: "",
-      name: "",
-      email: "",
-      phone: "",
-      fullAddress: "",
-      message: ""
-    });
+    e.stopPropagation();
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const response = await fetch("https://formcarry.com/s/jpFEOVCmLiA", {
+        method: 'POST',
+        headers: { 
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (data.code === 200) {
+        toast({
+          title: "Enquiry Submitted Successfully!",
+          description: "We'll get back to you soon.",
+          duration: 3000,
+        });
+        // Reset form
+        setFormData({
+          enquiryType: "",
+          name: "",
+          email: "",
+          phone: "",
+          fullAddress: "",
+          message: ""
+        });
+      } else {
+        setError(data.message || "Something went wrong. Please try again.");
+        toast({
+          title: "Submission Failed",
+          description: data.message || "Something went wrong. Please try again.",
+          duration: 3000,
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      setError(error.message || "Failed to submit form. Please try again.");
+      toast({
+        title: "Submission Failed",
+        description: error.message || "Failed to submit form. Please try again.",
+        duration: 3000,
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -99,80 +139,91 @@ export const EnquiryForm = () => {
       </div>
 
       {/* Enquiry Form Section */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg">
+      <form onSubmit={handleSubmit} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-sdblue mb-6">Send us a Message</h2>
         
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <Select
-            onValueChange={(value) => setFormData({ ...formData, enquiryType: value })}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Enquiry Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="admission">Admission Enquiry</SelectItem>
-              <SelectItem value="general">General Enquiry</SelectItem>
-              <SelectItem value="academic">Academic Enquiry</SelectItem>
-              <SelectItem value="transport">Transport Enquiry</SelectItem>
-              <SelectItem value="fee">Fee Structure Enquiry</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <div className="space-y-5">
-            <Input
-              type="text"
-              placeholder="Your Name"
-              className="w-full px-4 py-2 rounded-lg"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-            />
-
-            <Input
-              type="email"
-              placeholder="Email Address"
-              className="w-full px-4 py-2 rounded-lg"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-            />
-
-            <Input
-              type="tel"
-              placeholder="Phone Number"
-              className="w-full px-4 py-2 rounded-lg"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              required
-            />
-
-            <Input
-              type="text"
-              placeholder="Full Address"
-              className="w-full px-4 py-2 rounded-lg"
-              value={formData.fullAddress}
-              onChange={(e) => setFormData({ ...formData, fullAddress: e.target.value })}
-              required
-            />
-
-            <Textarea
-              placeholder="Your Message or Query"
-              className="w-full px-4 py-2 rounded-lg min-h-[120px]"
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              required
-            />
+        {error && (
+          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
+            {error}
           </div>
+        )}
 
-          <Button 
-            type="submit"
-            className="w-full bg-sdblue hover:bg-blue-600 text-white py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group"
-          >
-            <span>Submit Enquiry</span>
-            <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </form>
-      </div>
+        <Select
+          value={formData.enquiryType}
+          onValueChange={(value) => setFormData({ ...formData, enquiryType: value })}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Enquiry Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="admission">Admission Enquiry</SelectItem>
+            <SelectItem value="general">General Enquiry</SelectItem>
+            <SelectItem value="academic">Academic Enquiry</SelectItem>
+            <SelectItem value="transport">Transport Enquiry</SelectItem>
+            <SelectItem value="fee">Fee Structure Enquiry</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <div className="space-y-5">
+          <Input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            className="w-full px-4 py-2 rounded-lg"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+
+          <Input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            className="w-full px-4 py-2 rounded-lg"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
+          />
+
+          <Input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            className="w-full px-4 py-2 rounded-lg"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            required
+          />
+
+          <Input
+            type="text"
+            name="fullAddress"
+            placeholder="Full Address"
+            className="w-full px-4 py-2 rounded-lg"
+            value={formData.fullAddress}
+            onChange={(e) => setFormData({ ...formData, fullAddress: e.target.value })}
+            required
+          />
+
+          <Textarea
+            name="message"
+            placeholder="Your Message or Query"
+            className="w-full px-4 py-2 rounded-lg min-h-[120px]"
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            required
+          />
+        </div>
+
+        <Button 
+          type="submit"
+          className="w-full bg-sdblue hover:bg-blue-600 text-white py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group"
+          disabled={isSubmitting}
+        >
+          <span>{isSubmitting ? 'Submitting...' : 'Submit Enquiry'}</span>
+          <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </Button>
+      </form>
     </div>
   );
 };

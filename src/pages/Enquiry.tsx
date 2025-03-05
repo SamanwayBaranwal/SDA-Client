@@ -18,14 +18,62 @@ const Enquiry = () => {
     fullAddress: "",
     message: ""
   });
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Form submission logic
-    toast({
-      title: "Enquiry Submitted",
-      description: "We'll get back to you soon!",
-    });
+    e.stopPropagation();
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const response = await fetch("https://formcarry.com/s/jpFEOVCmLiA", {
+        method: 'POST',
+        headers: { 
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (data.code === 200) {
+        toast({
+          title: "Enquiry Submitted",
+          description: "We'll get back to you soon!",
+          duration: 3000,
+        });
+        // Reset form
+        setFormData({
+          enquiryType: "",
+          name: "",
+          email: "",
+          phone: "",
+          fullAddress: "",
+          message: ""
+        });
+      } else {
+        setError(data.message || "Something went wrong. Please try again.");
+        toast({
+          title: "Submission Failed",
+          description: data.message || "Something went wrong. Please try again.",
+          duration: 3000,
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      setError(error.message || "Failed to submit form. Please try again.");
+      toast({
+        title: "Submission Failed",
+        description: error.message || "Failed to submit form. Please try again.",
+        duration: 3000,
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -41,6 +89,12 @@ const Enquiry = () => {
             {/* Left Section - Form */}
             <div>
               <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
+
                 <Select
                   value={formData.enquiryType}
                   onValueChange={(value) => setFormData({ ...formData, enquiryType: value })}
@@ -51,60 +105,70 @@ const Enquiry = () => {
                   <SelectContent>
                     <SelectItem value="admission">Admission Enquiry</SelectItem>
                     <SelectItem value="general">General Enquiry</SelectItem>
-                    <SelectItem value="feedback">Feedback</SelectItem>
+                    <SelectItem value="academic">Academic Enquiry</SelectItem>
+                    <SelectItem value="transport">Transport Enquiry</SelectItem>
+                    <SelectItem value="fee">Fee Structure Enquiry</SelectItem>
                   </SelectContent>
                 </Select>
 
-                <Input
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full bg-white/70 backdrop-blur-sm"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                />
+                <div className="space-y-5">
+                  <Input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    className="w-full px-4 py-2 rounded-lg bg-white/70 backdrop-blur-sm"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                  />
 
-                <Input
-                  type="email"
-                  placeholder="Email Address"
-                  className="w-full bg-white/70 backdrop-blur-sm"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                    className="w-full px-4 py-2 rounded-lg bg-white/70 backdrop-blur-sm"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                  />
 
-                <Input
-                  type="tel"
-                  placeholder="Phone Number"
-                  className="w-full bg-white/70 backdrop-blur-sm"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  required
-                />
+                  <Input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    className="w-full px-4 py-2 rounded-lg bg-white/70 backdrop-blur-sm"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    required
+                  />
 
-                <Input
-                  type="text"
-                  placeholder="Full Address"
-                  className="w-full bg-white/70 backdrop-blur-sm"
-                  value={formData.fullAddress}
-                  onChange={(e) => setFormData({ ...formData, fullAddress: e.target.value })}
-                  required
-                />
+                  <Input
+                    type="text"
+                    name="fullAddress"
+                    placeholder="Full Address"
+                    className="w-full px-4 py-2 rounded-lg bg-white/70 backdrop-blur-sm"
+                    value={formData.fullAddress}
+                    onChange={(e) => setFormData({ ...formData, fullAddress: e.target.value })}
+                    required
+                  />
 
-                <Textarea
-                  placeholder="Your Message or Query"
-                  className="w-full min-h-[120px] bg-white/70 backdrop-blur-sm"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                />
+                  <Textarea
+                    name="message"
+                    placeholder="Your Message or Query"
+                    className="w-full px-4 py-2 rounded-lg min-h-[120px] bg-white/70 backdrop-blur-sm"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                  />
+                </div>
 
                 <Button 
                   type="submit"
-                  className="w-full bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] hover:opacity-90 text-white py-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group text-lg"
+                  className="w-full bg-sdblue hover:bg-blue-600 text-white py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group"
+                  disabled={isSubmitting}
                 >
-                  <span>Submit Enquiry</span>
-                  <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <span>{isSubmitting ? 'Submitting...' : 'Submit Enquiry'}</span>
+                  <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </form>
             </div>

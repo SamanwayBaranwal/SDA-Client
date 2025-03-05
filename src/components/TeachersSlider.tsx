@@ -89,7 +89,7 @@ export const TeachersSlider = ({ teachers }: TeachersSliderProps) => {
               <img
                 src={teacher.image}
                 alt={teacher.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-48 teacher-profile-image"
                 loading="lazy"
               />
               <div className="p-4">
@@ -111,7 +111,7 @@ export const TeachersSlider = ({ teachers }: TeachersSliderProps) => {
               <img
                 src={teacher.image}
                 alt={teacher.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-48 teacher-profile-image"
                 loading="lazy"
               />
               <div className="p-4">

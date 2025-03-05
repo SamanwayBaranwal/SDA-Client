@@ -11,38 +11,83 @@ interface Teacher {
 export const TEACHERS_DATA = [
   {
     id: 1,
+    name: "Abid Ali",
+    image: "/Teachers/Abid Ali.JPG"
+  },
+  {
+    id: 2,
+    name: "Anamika Mishra",
+    image: "/Teachers/Anamika Mishra.JPG"
+  },
+  {
+    id: 3,
+    name: "Aviriti Srivastav",
+    image: "/Teachers/Aviriti.JPG"
+  },
+  {
+    id: 4,
+    name: "Jagriti Solanki",
+    image: "/Teachers/Jagriti Solanki.JPG"
+  },
+  {
+    id: 5,
+    name: "Jaya Singh",
+    image: "/Teachers/Jaya Singh.JPG"
+  },
+  {
+    id: 6,
+    name: "JP Shukla",
+    image: "/Teachers/JP Shukla.JPG"
+  },
+  {
+    id: 7,
+    name: "Karuna Singh",
+    image: "/Teachers/Karuna Singh.JPG"
+  },
+  {
+    id: 8,
+    name: "KM Pandey",
+    image: "/Teachers/KM Pandey.jpeg"
+  },
+  {
+    id: 9,
     name: "Madhav Tripathi",
     image: "/Teachers/Madhav Tripathi.jpeg"
   },
   {
-    id: 2,
-    name: "JP Shukla",
-    image: "/Teachers/JP Shukla.jpeg"
-  },
-  {
-    id: 3,
-    name: "Abid Ali",
-    image: "/Teachers/Abid Ali.jpeg"
-  },
-  {
-    id: 4,
-    name: "KM Pandey",
-    image: "/Teachers/KN Pandey.jpeg"
-  },
-  {
-    id: 5,
+    id: 10,
     name: "Mamta Tiwari",
-    image: "/Teachers/Mamta Tiwari.jpg"
+    image: "/Teachers/Mamta Tiwari.JPG"
   },
   {
-    id: 6,
+    id: 11,
+    name: "Muskan Gupta",
+    image: "/Teachers/Muskan Gupta.JPG"
+  },
+  {
+    id: 12,
+    name: "Naveen Chaurasia",
+    image: "/Teachers/Naveen Chaurasia.jpeg"
+  },
+  {
+    id: 13,
     name: "Ashok Nigam",
     image: "/Teachers/Nigam.jpg"
   },
   {
-    id: 7,
-    name: "Naveen Chaurasia",
-    image: "/Teachers/Naveen Chaurasia.jpeg"
+    id: 14,
+    name: "Ruby Srivastav",
+    image: "/Teachers/Ruby Srivastav.JPG"
+  },
+  {
+    id: 15,
+    name: "Vishal Rai",
+    image: "/Teachers/Vishal Rai.JPG"
+  },
+  {
+    id: 16,
+    name: "Satya Prakash Yadav",
+    image: "/Teachers/Satya Prakash Yadav.png"
   }
 ];
 
@@ -73,7 +118,7 @@ export const TeachersSection = () => {
                   <img 
                     src={teacher.image} 
                     alt={teacher.name}
-                    className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full object-cover object-center"
+                    className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full teacher-circle-image"
                     loading={index < 6 ? "eager" : "lazy"}
                   />
                 </div>
