@@ -1,12 +1,23 @@
 import { Mail, Phone, MapPin, Facebook, Instagram, Youtube, Users } from 'lucide-react';
-import { CONTACT_EMAILS, ADDRESSES, PHONE_NUMBERS } from '@/constants/contact';
+import { CONTACT_EMAILS, EMAIL_PURPOSES, ADDRESSES, PHONE_NUMBERS } from '@/constants/contact';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from "react";
 
+// Initial visitor count value
+const INITIAL_VISITOR_COUNT = 389;
+
 // Function to get visitor count from localStorage
 const getVisitorCount = () => {
+  // Check if visitor count has been initialized
+  if (!localStorage.getItem('visitorCountInitialized')) {
+    // Set the initial count to 389
+    localStorage.setItem('visitorCount', INITIAL_VISITOR_COUNT.toString());
+    localStorage.setItem('visitorCountInitialized', 'true');
+    return INITIAL_VISITOR_COUNT;
+  }
+  
   const count = localStorage.getItem('visitorCount');
-  return count ? parseInt(count) : 0;
+  return count ? parseInt(count) : INITIAL_VISITOR_COUNT;
 };
 
 // Function to increment and save visitor count
@@ -18,31 +29,47 @@ const incrementVisitorCount = () => {
 };
 
 export const Footer = () => {
-  const [visitorCount, setVisitorCount] = useState(0);
+  const [visitorCount, setVisitorCount] = useState(INITIAL_VISITOR_COUNT);
   const [isCounterVisible, setIsCounterVisible] = useState(false);
 
   useEffect(() => {
-    // Check if this is a new session
+    // Initialize the counter on first load
+    const count = getVisitorCount();
+    setVisitorCount(count);
+    
+    // Check if this is a new session or if 30 minutes have passed
     const lastVisitTime = localStorage.getItem('lastVisitTime');
     const currentTime = new Date().getTime();
     const sessionTimeout = 30 * 60 * 1000; // 30 minutes
 
     if (!lastVisitTime || currentTime - parseInt(lastVisitTime) > sessionTimeout) {
-      // Increment count only if it's a new session
+      // Increment count only if it's a new session or 30 minutes have passed
       const newCount = incrementVisitorCount();
       setVisitorCount(newCount);
       localStorage.setItem('lastVisitTime', currentTime.toString());
-    } else {
-      // Just display the current count
-      setVisitorCount(getVisitorCount());
     }
+
+    // Set up interval to check and update count every 30 minutes
+    const intervalId = setInterval(() => {
+      const lastTime = localStorage.getItem('lastVisitTime');
+      const now = new Date().getTime();
+      
+      if (lastTime && now - parseInt(lastTime) > sessionTimeout) {
+        const updatedCount = incrementVisitorCount();
+        setVisitorCount(updatedCount);
+        localStorage.setItem('lastVisitTime', now.toString());
+      }
+    }, 60000); // Check every minute
 
     // Animate counter after a short delay
     const timer = setTimeout(() => {
       setIsCounterVisible(true);
     }, 500);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(intervalId);
+    };
   }, []);
 
   // Convert CONTACT_EMAILS object to array
@@ -93,17 +120,23 @@ export const Footer = () => {
               {emailList.map(({ key, email }) => (
                 <li key={key} className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-gray-300" />
-                  <a href={`mailto:${email}`} className="hover:text-gray-300 transition-colors">
-                    {email}
-                  </a>
+                  <div className="flex flex-col">
+                    <span className="text-sm text-gray-400">{EMAIL_PURPOSES[key as keyof typeof EMAIL_PURPOSES]}</span>
+                    <a href={`mailto:${email}`} className="hover:text-gray-300 transition-colors">
+                      {email}
+                    </a>
+                  </div>
                 </li>
               ))}
-              {Object.entries(ADDRESSES).map(([key, address]) => (
-                <li key={key} className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-gray-300" />
-                  <span>{address}</span>
-                </li>
-              ))}
+              <li className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-gray-300 mt-1" />
+                <div className="flex flex-col">
+                  <span className="text-sm text-gray-400">Our Branches</span>
+                  {ADDRESSES.map((address, index) => (
+                    <span key={index} className="text-sm">{address}</span>
+                  ))}
+                </div>
+              </li>
             </ul>
           </div>
 
@@ -114,25 +147,25 @@ export const Footer = () => {
                 href="https://m.facebook.com/SDAGORAKHPUR/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-blue-400 transition-colors duration-300"
+                className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 hover:scale-110"
               >
-                <Facebook size={24} />
+                <Facebook size={20} />
               </a>
               <a
                 href="https://www.instagram.com/sdagorakhpur?igsh=Zml3aHJpczR1Z2sw"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-pink-400 transition-colors duration-300"
+                className="p-2 rounded-full bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 hover:from-pink-600 hover:via-red-600 hover:to-yellow-600 transition-all duration-300 hover:scale-110"
               >
-                <Instagram size={24} />
+                <Instagram size={20} />
               </a>
               <a
                 href="https://youtube.com/@sdacademygorakhpur?si=96K2SO4WLcCEMETn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-red-500 transition-colors duration-300"
+                className="p-2 rounded-full bg-red-600 hover:bg-red-700 transition-all duration-300 hover:scale-110"
               >
-                <Youtube size={24} />
+                <Youtube size={20} />
               </a>
             </div>
           </div>

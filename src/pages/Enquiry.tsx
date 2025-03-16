@@ -42,7 +42,7 @@ const Enquiry = () => {
       if (data.code === 200) {
         toast({
           title: "Enquiry Submitted",
-          description: "We'll get back to you soon!",
+          description: "Thank you for contacting us, we will get back to you as soon as possible.",
           duration: 3000,
         });
         // Reset form

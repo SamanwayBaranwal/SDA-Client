@@ -1,36 +1,45 @@
 import { MapPin, Phone, Mail } from 'lucide-react';
+import { ADDRESSES, PHONE_NUMBERS, CONTACT_EMAILS, EMAIL_PURPOSES } from '@/constants/contact';
 
 export const ContactInfo = () => {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
+      <h2 className="text-2xl font-bold mb-4">Contact Information</h2>
       
       {/* Address */}
       <div className="flex items-start gap-2">
         <MapPin className="w-5 h-5 text-sdblue mt-1" />
-        <p className="text-gray-700">
-          Rapti Nagar, Near Shahpur Thana, Gorakhpur
-        </p>
+        <div>
+          <h3 className="font-semibold">Our Branches</h3>
+          {ADDRESSES.map((address, index) => (
+            <p key={index} className="text-gray-700">{address}</p>
+          ))}
+        </div>
       </div>
 
       {/* Phone Numbers */}
       <div className="flex items-start gap-2">
         <Phone className="w-5 h-5 text-sdblue mt-1" />
         <p className="text-gray-700">
-          +918881110745, +917388277496
+          {PHONE_NUMBERS.join(', ')}
         </p>
       </div>
 
       {/* Email */}
-      <div className="flex items-start gap-2">
-        <Mail className="w-5 h-5 text-sdblue mt-1" />
-        <a 
-          href="mailto:sdacademyho@gmail.com"
-          className="text-gray-700 hover:text-sdblue"
-        >
-          sdacademyho@gmail.com
-        </a>
-      </div>
+      {Object.entries(CONTACT_EMAILS).map(([key, email]) => (
+        <div key={key} className="flex items-start gap-2">
+          <Mail className="w-5 h-5 text-sdblue mt-1" />
+          <div>
+            <h3 className="font-semibold">{EMAIL_PURPOSES[key as keyof typeof EMAIL_PURPOSES]}</h3>
+            <a 
+              href={`mailto:${email}`}
+              className="text-gray-700 hover:text-sdblue"
+            >
+              {email}
+            </a>
+          </div>
+        </div>
+      ))}
 
       {/* Map */}
       <div className="mt-6">
@@ -46,4 +55,4 @@ export const ContactInfo = () => {
       </div>
     </div>
   );
-}; 
+};

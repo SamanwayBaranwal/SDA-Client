@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Send } from 'lucide-react';
-import { ADDRESSES, PHONE_NUMBERS, CONTACT_EMAILS } from '@/constants/contact';
+import { ADDRESSES, PHONE_NUMBERS, CONTACT_EMAILS, EMAIL_PURPOSES } from '@/constants/contact';
 
 export const EnquiryForm = () => {
   const { toast } = useToast();
@@ -87,15 +87,10 @@ export const EnquiryForm = () => {
             <div className="flex items-start gap-3 group">
               <MapPin className="w-5 h-5 text-sdblue mt-1 group-hover:scale-110 transition-transform" />
               <div>
-                <h3 className="font-semibold text-gray-800">Main Branch</h3>
-                <p className="text-gray-600">{ADDRESSES.MAIN}</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 group">
-              <MapPin className="w-5 h-5 text-sdblue mt-1 group-hover:scale-110 transition-transform" />
-              <div>
-                <h3 className="font-semibold text-gray-800">Second Branch</h3>
-                <p className="text-gray-600">{ADDRESSES.SECOND}</p>
+                <h3 className="font-semibold text-gray-800">Our Branches</h3>
+                {ADDRESSES.map((address, index) => (
+                  <p key={index} className="text-gray-600">{address}</p>
+                ))}
               </div>
             </div>
           </div>
@@ -114,12 +109,15 @@ export const EnquiryForm = () => {
             {Object.entries(CONTACT_EMAILS).map(([key, email]) => (
               <div key={key} className="flex items-center gap-3 group">
                 <Mail className="w-5 h-5 text-sdblue group-hover:scale-110 transition-transform" />
-                <a 
-                  href={`mailto:${email}`}
-                  className="text-gray-600 hover:text-sdblue transition-colors"
-                >
-                  {email}
-                </a>
+                <div>
+                  <h3 className="font-semibold text-gray-800">{EMAIL_PURPOSES[key as keyof typeof EMAIL_PURPOSES]}</h3>
+                  <a 
+                    href={`mailto:${email}`}
+                    className="text-gray-600 hover:text-sdblue transition-colors"
+                  >
+                    {email}
+                  </a>
+                </div>
               </div>
             ))}
           </div>
@@ -207,7 +205,7 @@ export const EnquiryForm = () => {
 
           <Textarea
             name="message"
-            placeholder="Your Message or Query"
+            placeholder="Your Message"
             className="w-full px-4 py-2 rounded-lg min-h-[120px]"
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -216,12 +214,12 @@ export const EnquiryForm = () => {
         </div>
 
         <Button 
-          type="submit"
-          className="w-full bg-sdblue hover:bg-blue-600 text-white py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group"
+          type="submit" 
+          className="w-full bg-sdblue hover:bg-blue-700 text-white py-2 rounded-lg flex items-center justify-center gap-2"
           disabled={isSubmitting}
         >
-          <span>{isSubmitting ? 'Submitting...' : 'Submit Enquiry'}</span>
-          <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          {isSubmitting ? 'Sending...' : 'Send Message'}
+          <Send className="w-4 h-4" />
         </Button>
       </form>
     </div>

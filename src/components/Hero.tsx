@@ -11,7 +11,11 @@ const backgroundImages = [
   '/homeImage/3.jpeg',
   '/homeImage/4.jpeg',
   '/homeImage/5.jpg',
-  '/homeImage/6.jpg'
+  '/homeImage/6.jpg',
+  '/homeImage/7.jpeg',
+  '/homeImage/8.jpeg',
+  '/homeImage/9.jpeg',
+  '/homeImage/10.jpeg'
 ];
 
 export const Hero = () => {

@@ -27,7 +27,7 @@ export const Navigation = () => {
     },
     { 
       label: 'Infrastructure', 
-      path: '/infrastructure',
+      
       dropdown: [
         { label: 'Building', path: '/infrastructure/building' },
         { label: 'Safety', path: '/infrastructure/safety' },
@@ -131,7 +131,10 @@ export const Navigation = () => {
               <span className="text-lg md:text-xl font-bold tracking-wide transition-all duration-300 group-hover:text-blue-300">
                 SD Academy
               </span>
-              <span className="text-xs md:text-sm text-gray-300 font-light tracking-wider">Excellence in Education</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs md:text-sm text-gray-300 font-light tracking-wider">Excellence in Education</span>
+                <span className="text-xs text-gray-200 font-bold ml-1">[ Since 2005 ]</span>
+              </div>
             </div>
           </Link>
 
